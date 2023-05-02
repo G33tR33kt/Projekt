@@ -1,12 +1,14 @@
 package projekt;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 import java.sql.PreparedStatement;
 
 
@@ -212,9 +214,9 @@ public class SelectQueries {
 	            String hodnotenie = result.getString("rating");
 
 	            if (hodnotenie != null) {
-	                writer.write("Nazov: " + nazov + ", Reziser: " + reziser + ", Rok vydania: " + rok + ", Herci: " + herci + ", Rating: " + hodnotenie + "\n");
+	                writer.write("" + nazov + " " + reziser + " " + rok + " " + herci + " " + hodnotenie + "\n");
 	            } else {
-	                writer.write("Nazov: " + nazov + ", Reziser: " + reziser + ", Rok vydania: " + rok + ", Herci: " + herci + "\n");
+	                writer.write("" + nazov + " " + reziser + " " + rok + " " + herci + "\n");
 	            }
 	        }
 
@@ -291,14 +293,14 @@ public class SelectQueries {
 	
 	public static void vypisHercovVDvochFilmoch() {
 	    try {
-	    	Connection conn = DBConnection.getDBConnection();
+	        Connection conn = DBConnection.getDBConnection();
 	        Statement stmt = conn.createStatement();
 	        stmt.execute("SET NAMES utf8");
-	        String sql = "SELECT nazov, GROUP_CONCAT(f.nazov) AS filmyaherci " +
-	                     "FROM filmy " +
+	        String sql = "SELECT h.meno AS herci, GROUP_CONCAT(f.nazov) AS filmy " +
+	                     "FROM filmy f " +
 	                     "JOIN obsadenie o ON f.id = o.film_id " +
 	                     "JOIN herci h ON h.id = o.herci_id " +
-	                     "GROUP BY herci " +
+	                     "GROUP BY h.meno " +
 	                     "HAVING COUNT(DISTINCT f.id) > 1";
 	        ResultSet rs = stmt.executeQuery(sql);
 
@@ -310,7 +312,6 @@ public class SelectQueries {
 	            System.out.println(herci + ": " + filmy);
 	        }
 
-	        
 	    } catch (SQLException e) {
 	        System.out.println(e.getMessage());
 	    }
@@ -342,4 +343,80 @@ public class SelectQueries {
 	        System.out.println(e.getMessage());
 	    }
 	}
+	
+	
+	public void nacitatFilm(String fileName) {
+		Scanner scanner = null;
+	    try {
+	    	Connection conn = DBConnection.getDBConnection();
+	        scanner = new Scanner(new File(fileName));
+
+	        String nazov = scanner.next();
+	        String reziser = scanner.next();
+	        int rok = scanner.nextInt();
+	        String herci = scanner.next();
+	        double rating = scanner.nextDouble();
+
+	        String insertSql = "INSERT INTO filmy (nazov, reziser, rok, herci, rating) VALUES (?, ?, ?, ?, ?)";
+
+	       
+	        PreparedStatement preparedStatement = conn.prepareStatement(insertSql);
+	        preparedStatement.setString(1, nazov);
+	        preparedStatement.setString(2, reziser);
+	        preparedStatement.setInt(3, rok);
+	        preparedStatement.setString(4, herci);
+	        preparedStatement.setDouble(5, rating);
+
+	        
+	        preparedStatement.executeUpdate();
+
+	    } catch (FileNotFoundException e) {
+	        System.err.println("Subor sa neda otvorit!");
+	    } catch (Exception e) {
+	        System.err.println("Chyba pri nacitavani suboru!");
+	    } finally {
+	        if (scanner != null) {
+	            scanner.close();
+	        }
+		
+	    }
+	}
+	
+	public void nacitatAnimak(String fileName1) {
+		Scanner scanner = null;
+	    try {
+	    	Connection conn = DBConnection.getDBConnection();
+	        scanner = new Scanner(new File(fileName1));
+
+	        String nazov = scanner.next();
+	        String reziser = scanner.next();
+	        int rok = scanner.nextInt();
+	        String animatori = scanner.next();
+	        int vek = scanner.nextInt();
+	        String hodnotenie = scanner.next();
+
+	        String insertSql = "INSERT INTO animaky (nazov, reziser, rok, animatori, vek, hodnotenie) VALUES (?, ?, ?, ?, ?, ?)";
+
+	       
+	        PreparedStatement preparedStatement = conn.prepareStatement(insertSql);
+	        preparedStatement.setString(1, nazov);
+	        preparedStatement.setString(2, reziser);
+	        preparedStatement.setInt(3, rok);
+	        preparedStatement.setString(4, animatori);
+	        preparedStatement.setInt(5, vek);
+	        preparedStatement.setString(6, hodnotenie);
+	        
+	        preparedStatement.executeUpdate();
+
+	    } catch (FileNotFoundException e) {
+	        System.err.println("Subor sa neda otvorit!");
+	    } catch (Exception e) {
+	        System.err.println("Chyba pri nacitavani suboru!");
+	    } finally {
+	        if (scanner != null) {
+	            scanner.close();
+	        }
+		
+}
+}
 }

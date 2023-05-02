@@ -80,42 +80,124 @@ public class RunApp {
 		        
 	            	InsertQueries i3 = new InsertQueries();
 		            i3.insertNewAnime(nazov, reziser, rok, animatori, vek);
-	            }	else {
-	            	System.err.println("Nesprávne zadaný druh filmu");
-	            }
+	            }	
 				break;
 	        case 2:
-	        	System.out.println("Zadejte druh filmu(h - hraný film, a - animovaný film)");
+	        	System.out.println("Zadajte druh filmu(h - hraný film, a - animovaný film)");
 	        	String check2 = sc.next();
-	            
+	   	            	
 	            if(check2.equals("h")){
-	            System.out.println("Zadejte názov filmu ktorý chcete upraviť");
-	            String nazov = sc.next();
-	            SelectQueries sq = new SelectQueries();
-					if (sq.testIfFilmExists(nazov)){
-						System.out.println("Zadajte upravený názov:");
-						String nazov1 = sc.next();
-						System.out.println("Zadajte upravené meno režiséra:");
-						String reziser = sc.next();
-						System.out.println("Zadajte upravený rok vydania:");
-						int rok = sc.nextInt();
-						System.out.println("Zadajte upravené meno herca:");
-						String herci = sc.next();
-						System.out.println("Zadajte upravené hodnotenie(1-10) filmu:");
-						int rating = sc.nextInt();
-						UpdateQueries uq = new UpdateQueries();
-						uq.upadateFilm (nazov1, reziser, rok, herci, rating);
-
-	                System.out.println("Film " + nazov + " bol úspešne upravený");
-	            } 
-	            }	
-					else {
 	            	
-	            	System.err.println("Nesprávne zadaný názov filmu");
+	        	System.out.println("Zadajte názov filmu, ktorý chcete upravit:");
+	        	String nazov = sc.next();
+
+	        	SelectQueries sq = new SelectQueries();
+
+	        	if (sq.testIfFilmExists(nazov)) {
+	        	    System.out.println("Vyberte atribut, který chcete upravit:");
+	        	    System.out.println("1 - názov");
+	        	    System.out.println("2 - režisér");
+	        	    System.out.println("3 - rok vydania");
+	        	    System.out.println("4 - herci");
+	        	    int volba = ConsoleInput.readNumberInputFromConsole(sc);
+
+	        	    UpdateQueries uq = new UpdateQueries();
+
+	        	    switch (volba) {
+	        	        case 1:
+	        	            System.out.println("Zadajte nový názov:");
+	        	            String novyNazov = sc.next();
+	        	            uq.upadateFilmNazov(nazov, novyNazov);
+	        	            System.out.println("Názov pre film " + nazov + " bol úspešne zmenený");
+	        	            break;
+	        	        case 2:
+	        	            System.out.println("Zadajte nového režiséra:");
+	        	            String novyReziser = sc.next();
+	        	            uq.upadateFilmReziser(nazov, novyReziser);
+	        	            System.out.println("Režisér pre film " + nazov + " bol úspešne zmenený");
+	        	            break;
+	        	        case 3:
+	        	            System.out.println("Zadajte nový rok vydania:");
+	        	            int novyRok = ConsoleInput.readNumberInputFromConsole(sc);
+	        	            uq.upadateFilmRokVydania(nazov, novyRok);
+	        	            System.out.println("Rok pre film " + nazov + " bol úspešne zmenený");
+	        	            break;
+	        	        case 4:
+	        	            System.out.println("Zadajte nový zoznam hercov (oddeleny ciarkami):");
+	        	            String novySeznam = sc.next();
+	        	            uq.upadateFilmHerci(nazov, novySeznam);
+	        	            System.out.println("Herci pre film " + nazov + " boli úspešne zmenení");
+	        	            break;
+	        	        default:
+	        	            System.err.println("Neplatná volba.");
+	        	            break;
+	        	    }
+
+	        	    System.out.println("Film " + nazov + " bol úspešne upravený.");
+	        	} else {
+	        	    System.err.println("Film " + nazov + " neexistuje.");
+	        	}
 	            }
 	        	
-	        	
-	        	
+	            if(check2.equals("a")){
+	            	System.out.println("Zadajte názov animaku, ktorý chcete upravit:");
+		        	String nazov = sc.next();
+
+		        	SelectQueries sq = new SelectQueries();
+
+		        	if (sq.testIfAnimeExists(nazov)) {
+		        	    System.out.println("Vyberte atribut, ktorý chcete upravit:");
+		        	    System.out.println("1 - názov");
+		        	    System.out.println("2 - režisér");
+		        	    System.out.println("3 - rok vydání");
+		        	    System.out.println("4 - animátoři");
+		        	    System.out.println("5 - doporučený vek");
+		        	    int volba = ConsoleInput.readNumberInputFromConsole(sc);
+
+		        	    UpdateQueries uq = new UpdateQueries();
+
+		        	    switch (volba) {
+		        	        case 1:
+		        	            System.out.println("Zadejte nový názov:");
+		        	            String novyNazov = sc.next();
+		        	            uq.upadateAnimeNazov(nazov, novyNazov);
+		        	            System.out.println("Názov pre film " + nazov + " bol úspešne zmenený");
+		        	            break;
+		        	        case 2:
+		        	            System.out.println("Zadajte nového režiséra:");
+		        	            String novyReziser = sc.next();
+		        	            uq.upadateAnimeReziser(nazov, novyReziser);
+		        	            System.out.println("Režisér pre film " + nazov + " bol úspešne zmenený");
+		        	            break;
+		        	        case 3:
+		        	            System.out.println("Zadejte nový rok vydania:");
+		        	            int novyRok = ConsoleInput.readNumberInputFromConsole(sc);
+		        	            uq.upadateAnimeRokVydania(nazov, novyRok);
+		        	            System.out.println("Rok pre film " + nazov + " bol úspešne zmenený");
+		        	            break;
+		        	        case 4:
+		        	            System.out.println("Zadajte nový zoznam animatorov (oddelený čiarkami):");
+		        	            String novySeznam = sc.next();
+		        	            uq.upadateAnimeAnimatori(nazov, novySeznam);
+		        	            System.out.println("Animatori pre film " + nazov + " bol úspešne zmenený");
+		        	            break;
+		        	        case 5:
+		        	            System.out.println("Zadajte nový zoznam animatorov (oddelený čiarkami):");
+		        	            String novyvek = sc.next();
+		        	            uq.upadateAnimeVek(nazov, novyvek);
+		        	            System.out.println("Animatori pre film " + nazov + " bol úspešne zmenený");
+		        	            break;
+		        	        default:
+		        	            System.err.println("Neplatná volba.");
+		        	            break;
+		        	    }
+
+		        	    System.out.println("Film " + nazov + " bol úspesne upravený.");
+		        	} else {
+		        	    System.err.println("Film " + nazov + " neexistuje.");
+		        	}
+	            	
+	            }
 	        	
 	        	
 	        	
@@ -146,9 +228,7 @@ public class RunApp {
 		                } else {
 		                  System.out.println("Animák s daným názvom neexistuje, skúste zadať názov správne.");
 		                }
-	            } else {
-	            	System.err.println("Nesprávne zadaný druh filmu");
-	            }
+	            } 
 				break;
 	        case  4:
 	        	System.out.println("Zadejte druh filmu(h - hraný film, a - animovaný film)");
@@ -156,47 +236,48 @@ public class RunApp {
 	            
 	            if(check4.equals("h")){
 	            System.out.println("Zadejte názov filmu ktorý chcete ohodnotiť");
-	            String nazov = sc.next();
-	            SelectQueries sq = new SelectQueries();
-					if (sq.testIfFilmExists(nazov)){
+	            String nazov1 = sc.next();
+	            SelectQueries sq1 = new SelectQueries();
+					if (sq1.testIfFilmExists(nazov1)){
 						System.out.println("Zadajte vaše hodnotenie filmu (1-10)");
 						int rating = ConsoleInput.readNumberInputFromConsole(sc);
-						UpdateQueries uq = new UpdateQueries();
-						uq.updateFilmRating (nazov, rating);
+						UpdateQueries uq1 = new UpdateQueries();
+						uq1.updateFilmRating (nazov1, rating);
 
-	                System.out.println("Hodnotenie pre film " + nazov + " bolo úspešne pridané");
+	                System.out.println("Hodnotenie pre film " + nazov1 + " bolo úspešne pridané");
 	            } 
-	            }	
-					else {
-	            	
-	            	System.err.println("Nesprávne zadaný názov filmu");
-	            }
+	       }	
 	            
 				if(check4.equals("a")){
 		            System.out.println("Zadejte názov animáku ktorý chcete ohodnotiť");
 		            String nazov = sc.next();
-		            SelectQueries sqq = new SelectQueries();
-					if (sqq.testIfFilmExists(nazov)){
+		            SelectQueries sq = new SelectQueries();
+					if (sq.testIfAnimeExists(nazov)){
 		            	System.out.println("Zadajte vaše hodnotenie filmu vo forme * (1-5 hviezdičiek)");
 		            	String hodnotenie = sc.next();
-		                UpdateQueries uqq = new UpdateQueries();
-		                uqq.updateAnimeRating (nazov, hodnotenie);
+		                UpdateQueries uq = new UpdateQueries();
+		                uq.updateAnimeRating (nazov, hodnotenie);
 
 		                System.out.println("Hodnotenie pre film " + nazov + " bolo úspešne pridané");
 		            } 
 					
 				
 	            } 
-					else {
-	            	System.err.println("Nesprávne zadaný názov animáku");
-	            }
+					
 	           
 	            break;
 	        case 5:
-	        	SelectQueries se = new SelectQueries(); 
-	            se.getAllFilms();
-	            SelectQueries sa = new SelectQueries(); 
-	            sa.getAllAnimes();
+	        	System.out.println("Zadejte druh filmu(h - hraný film, a - animovaný film)");
+	        	String check5 = sc.next();
+	        	
+	        	if(check5.equals("h")){
+	        		SelectQueries se = new SelectQueries(); 
+	        		se.getAllFilms();
+	        	}
+	        	if(check5.equals("a")){
+	        		SelectQueries sa = new SelectQueries(); 
+		            sa.getAllAnimes();
+	        	}
 	          break;
 	        case 6:
 	        	System.out.println("Zadejte druh filmu(h - hraný film, a - animovaný film)");
@@ -224,9 +305,7 @@ public class RunApp {
 		            }else {
 		            	System.out.println("Animak s daným názvom neexistuje, skúste zadať názov správne.");
 		            }
-	            } else {
-	            	System.err.println("Nesprávne zadaný druh filmu");
-	            }
+	            } 
 	          break;
 	        case 7:
 	        	System.out.println("Zadejte či sa jedná o herca alebo animátora(h - herec, a - animátor)");
@@ -264,10 +343,7 @@ public class RunApp {
 		            else {
 		            	System.out.println("Tento animátor neexistuje");
 	            }
-	            }else {
-	            	System.err.println("Nesprávne zadaný druh filmu");
 	            }
-	            	
 	          break;
 	        case 9:
 	        	System.out.println("Zadejte druh filmu(h - hraný film, a - animovaný film)");	
@@ -284,7 +360,7 @@ public class RunApp {
 	            }
 	            }	if(check9.equals("a")) {
 	            	SelectQueries db3 = new SelectQueries(); 
-		        	System.out.println("Zadejte nazov animaku");;;
+		        	System.out.println("Zadejte nazov animaku");
 		            String animefile = sc.next();
 		            if(db3.testIfAnimeExists(animefile)) {
 		        	db3.ulozAnime(animefile);
@@ -296,6 +372,22 @@ public class RunApp {
 	            }
 		      break;
 	        case 10:
+	        	System.out.println("Zadejte druh filmu(h - hraný film, a - animovaný film)");	
+	        	String check10 = sc.next();
+	            
+	            if(check10.equals("h")){
+	            SelectQueries db4 = new SelectQueries();
+	        	System.out.println("Zadejte nazov textového súboru");
+	            String fileName = sc.next();
+	        	db4.nacitatFilm(fileName);
+	            }
+	            
+	            if(check10.equals("a")){
+		            SelectQueries db5 = new SelectQueries();
+		        	System.out.println("Zadejte nazov textového súboru");
+		            String fileName1 = sc.next();
+		        	db5.nacitatAnimak(fileName1);
+		            }
 		      break;
 	        case 11:
 	        	 run = false;
